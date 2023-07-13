@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function Consulreparaciones({ navigation }) {
   const [reparaciones, setReparaciones] = useState([]);
+  const [nombresClientes, setNombresClientes] = useState({});
 
   const obtenerReparaciones = async () => {
     try {
@@ -35,6 +36,14 @@ export default function Consulreparaciones({ navigation }) {
         reparacionesObtenidas.push(reparacion);
       }
       setReparaciones(reparacionesObtenidas);
+
+      const clientesSnapshot = await getDocs(collection(database, 'clientes'));
+      const nombres = {};
+      clientesSnapshot.forEach((clienteDoc) => {
+        const cliente = clienteDoc.data();
+        nombres[cliente.id] = cliente.nombre; // Asigna el nombre del cliente usando su ID
+      });
+      setNombresClientes(nombres);
     } catch (error) {
       console.error('Error al obtener las reparaciones', error);
     }
@@ -71,7 +80,7 @@ export default function Consulreparaciones({ navigation }) {
                   <Text style={styles.reparacionText}>{new Date(reparacion.fechaini).toLocaleDateString()}</Text>
                 </Text>
               )}
-              <Text style={styles.reparacionText}>{`Cliente: ${reparacion.vehiculo.cliente_id}`}</Text>
+              <Text style={styles.reparacionText}>{`Cliente: ${nombresClientes[reparacion.vehiculo.cliente_id]}`}</Text>
               <Text style={styles.reparacionText}>{`Vehículo: ${reparacion.vehiculo.marca} ${reparacion.vehiculo.modelo} (${reparacion.vehiculo.year})`}</Text>
               {reparacion.vehiculo_id && (
                 <Text style={styles.reparacionText}>{`ID del vehículo: ${reparacion.vehiculo_id}`}</Text>

@@ -5,6 +5,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { AntDesign } from '@expo/vector-icons'; 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { FontAwesome } from '@expo/vector-icons'; 
+
 
 //Screens
 import HomeScreen from "./screens/HomeScreen";
@@ -13,13 +15,12 @@ import ReparacionesScreen from "./screens/ReparacionesScreen";
 import EmpleadosScreen from "./screens/EmpleadosScreen";
 import ConsultaScreen from "./screens/ConsultaScreen";
 import ConsulempScreen from "./screens/ConsulempScreen";
-
-//INTENTO
 import Consulservicios from "./screens/Consulservicios";
 import Consulreparaciones from "./screens/Consulreparaciones";
+import VehiculosScreen from './screens/VehiculosScreen';
+import QrScreen from './screens/QrScreen';
 
-
-
+import ConsulV from './screens/ConsulV'
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -29,10 +30,10 @@ function MyTabs() {
     <Tab.Navigator
       initialRouteName='Home'
       screenOptions={{
-        tabBarActiveTintColor: '#CDCDCD',
+        tabBarActiveTintColor: '#D2B4DE',
         tabBarInactiveTintColor: '#EEE',
         tabBarStyle: {
-          backgroundColor: '#008BFF',
+          backgroundColor: '#1A5276',
         },
       }}
     >
@@ -40,9 +41,20 @@ function MyTabs() {
         name="Inicio"
         component={HomeScreen}
         options={{
-          tabBarLabel: 'Inicio',
+          tabBarLabel: 'Consulta',
           tabBarIcon: ({ color, size}) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+            <MaterialCommunityIcons name="magnify" color={color} size={size} />
+            ),
+            headerShown: true,
+          }}
+        />
+        <Tab.Screen
+        name="Vehiculos"
+        component={VehiculosScreen}
+        options={{
+          tabBarLabel: 'Vehículos',
+          tabBarIcon: ({ color, size}) => (
+            <FontAwesome name="car" size={24} color={color} /> //2728282
             ),
             headerShown: true,
           }}
@@ -64,7 +76,7 @@ function MyTabs() {
           options={{
             tabBarLabel: 'Empleados',
             tabBarIcon: ({ color, size}) => (
-              <MaterialIcons name="work" size={24} color="white" />
+              <MaterialIcons name="work" size={24} color={color} />
             ),
             headerShown: true,
           }}
@@ -73,7 +85,7 @@ function MyTabs() {
     name="Reparaciones"
     component={ReparacionesScreen}
     options={{
-      tabBarLabel: 'Reparaciones',
+      tabBarLabel: 'Servicios',
       tabBarIcon: ({ color, size}) => (
         <MaterialIcons name="car-repair" size={24} color={color} /> // El color del icono se ajustará automáticamente al color de texto activo/inactivo
       ),
@@ -93,6 +105,9 @@ function MyTabs() {
           <Stack.Screen name="Consulservicios" component={Consulservicios} />
           <Stack.Screen name="Consulreparaciones" component={Consulreparaciones} />
           <Stack.Screen name="ConsultaScreen" component={ConsultaScreen} />
+          <Stack.Screen name="QrScreen" component={QrScreen} />
+          <Stack.Screen name="ConsulV" component={ConsulV} />
+          
                
           </Stack.Navigator>
       </NavigationContainer>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-import { collection, getDocs, deleteDoc } from 'firebase/firestore';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { database } from '../config/fb';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -37,28 +37,44 @@ const ConsulempScreen = ({ navigation }) => {
     setSearchValue(searchValue);
     const filteredEmpleados = datos.filter((empleado) =>
       empleado.nombre.toLowerCase().includes(searchValue.toLowerCase()) ||
-      empleado.cedula.toLowerCase().includes(searchValue.toLowerCase())
+      empleado.correo.toLowerCase().includes(searchValue.toLowerCase())
     );
     setFilteredEmpleados(filteredEmpleados.map((empleado) => empleado.id)); // almacenar solo los IDs
   }
 
-  function handleSearchByCedula() {
+  function handleSearchByCorreo() {
     const filteredEmpleados = datos.filter((empleado) =>
-      empleado.cedula.toLowerCase().includes(searchValue.toLowerCase())
+      empleado.correo.toLowerCase().includes(searchValue.toLowerCase())
     );
     setFilteredEmpleados(filteredEmpleados.map((empleado) => empleado.id)); // almacenar solo los IDs
   }
 
   async function handleDelete(id) {
-    try {
-      await deleteDoc(collection(database, 'empleados', empleadoId));
+    Alert.alert(
+      'Confirmación',
+      '¿Estás seguro de que deseas eliminar este empleado?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          onPress: async () => {
+            try {
+              await deleteDoc(doc(database, 'empleados', id)); // eliminar el documento con el ID proporcionado
 
-      const datosFiltrados = datos.filter((empleado) => empleado.id !== id);
-      setDatos(datosFiltrados);
-      setFilteredEmpleados(datosFiltrados.map((empleado) => empleado.id)); // actualizar solo los IDs
-    } catch (error) {
-      console.error('Error al eliminar el empleado', error);
-    }
+              const datosFiltrados = datos.filter((empleado) => empleado.id !== id);
+              setDatos(datosFiltrados);
+              setFilteredEmpleados(datosFiltrados.map((empleado) => empleado.id)); // actualizar solo los IDs
+            } catch (error) {
+              console.error('Error al eliminar el empleado', error);
+            }
+          },
+          style: 'destructive',
+        },
+      ],
+    );
   }
 
   // función auxiliar para obtener el objeto de empleado correspondiente a un ID
@@ -69,16 +85,19 @@ const ConsulempScreen = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}></Text>
-      <TextInput
-        placeholder="Nombre/Cedula"
-        placeholderTextColor="#aaa"
-        value={searchValue}
-        onChangeText={(text) => handleSearch(text)}
-        style={styles.input}
-      />
-      <View style={styles.buttonContainer}>
-        <Button title="Buscar" onPress={handleSearchByCedula} containerStyle={styles.button}/>
-      </View>
+      <View style={styles.searchContainer}>
+            <TextInput
+              placeholder="Nombre/Correo"
+              placeholderTextColor="#aaa"
+              value={searchValue}
+              onChangeText={(text) => handleSearch(text)}
+              style={styles.input}
+            />
+            <TouchableOpacity style={styles.searchButton} onPress={() => handleSearch(searchValue)}>
+              <Icon name="search" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+      
       {filteredEmpleados.map((empleadoId, index) => {
         const empleado = getEmpleadoById(empleadoId);
         if (!empleado) {
@@ -87,43 +106,53 @@ const ConsulempScreen = ({ navigation }) => {
         return (
           <View key={index} style={styles.item}>
             <Text style={[styles.nombre, { marginRight: 5 }]}>{empleado.nombre}</Text>
-            <Text style={styles.cedula}>Cédula: {empleado.cedula}</Text>
-            <Text style={styles.direccion}>Dirección: {empleado.direccion}</Text>
+            <Text style={styles.empleadoId}>Empleado ID: {empleadoId}</Text>
+            <Text style={styles.correo}>Correo: {empleado.email}</Text>
             <Text style={styles.telefono}>Teléfono: {empleado.telefono}</Text>
             <Text style={styles.cargo}>Cargo: {empleado.cargo}</Text>
+            <Text style={styles.direccion}>Dirección: {empleado.direccion}</Text>
             <Text style={styles.sueldo}>Sueldo: {empleado.sueldo}</Text>
+            
+            
             <View style={styles.buttonsContainer}>
-              <TouchableOpacity onPress={() => handleDelete(empleado.id)} style={[styles.buttonSmall, { marginRight: 5 }]}>
-                <Icon name="trash" size={15} color="#fff" />
+              <TouchableOpacity onPress={() => handleDelete(empleado.id)}                style={[styles.button, { backgroundColor: 'red' }]}>
+                <Icon name="trash" size={20} color="white" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleEdit(empleado.id)} style={styles.buttonSmall}>
-                <Icon name="edit" size={15} color="#fff" />
+              <TouchableOpacity onPress={() => handleEdit(cliente.idCliente)} style={styles.buttonSmall}>
+                <Icon name="edit" size={20} color="#fff" />
               </TouchableOpacity>
             </View>
           </View>
         );
       })}
-      <View style={{ height: 200 }} />
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
     paddingBottom: 10,
   },
   title: {
     fontSize: 18,
     textAlign: 'center',
-    marginBottom: 22,
+    marginBottom: 10,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginBottom: 10,
+    backgroundColor: 'blue',
   },
   input: {
-    backgroundColor: "white",
-    color: "black",
-    padding: 15,
-    borderRadius: 5,
-    marginBottom: 10,
+    flex: 1,
+    color:'#000'
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -131,13 +160,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    marginHorizontal: 5,
-    alignItems: 'center',
+    backgroundColor: '#1E90FF',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginLeft: 5,
+    color: '#fff',
   },
   item: {
-    backgroundColor: 'white',
-    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
     borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     marginBottom: 10,
   },
   nombre: {
@@ -145,11 +180,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
   },
-  cedula: {
-    fontSize: 14,
-    marginBottom: 5,
-  },
-  direccion: {
+  correo: {
     fontSize: 14,
     marginBottom: 5,
   },
@@ -157,25 +188,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 5,
   },
-  cargo: {
-    fontSize: 14,
-    marginBottom: 5,
-  },
-  sueldo: {
-    fontSize: 14,
-    marginBottom: 10,
-  },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    marginTop: 5,
   },
   buttonSmall: {
-    backgroundColor: 'red',
+    backgroundColor: '#1E90FF',
     borderRadius: 5,
     paddingHorizontal: 5,
-    paddingVertical: 2,
-    marginBottom: 5,
-    marginRight: 10,
+    paddingVertical: 3,
+    marginLeft: 5,
   },
 });
 

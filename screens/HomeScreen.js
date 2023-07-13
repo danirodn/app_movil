@@ -1,79 +1,114 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'; 
+import { LinearGradient } from 'expo-linear-gradient';
+
+
 import ConsulempScreen from "./ConsulempScreen";
+const gradientStyle = {
+  colors: ['#16222A', '#3A6073', '#16222A'],
+  start: { x: 0, y: 0 },
+  end: { x: 1, y: 0 },
+};
 
 const HomeScreen = () => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      {/* Botón de ayuda */}
+      
+      
+
+      <View style={styles.buttonContainer}>
       <Button
-        title="?"
-        buttonStyle={[styles.helpButtonStyle]}
-        titleStyle={[styles.helpButtonTitleStyle]}
-        onPress={() => {
-          // Agrega aquí la lógica para mostrar la ayuda
-        }}
+        title={
+          <>
+            <FontAwesome5 name="toolbox" size={24} color="white" />
+            <Text style={[styles.buttonTitleStyle, {fontSize: 18, marginLeft: 10}]}>Mantenimiento</Text>
+          </>
+        }
+        onPress={() => { navigation.navigate('Consulservicios')}}
+        ViewComponent={LinearGradient} // Agrega esta prop para usar LinearGradient en lugar de View
+        linearGradientProps={gradientStyle} // Agrega esta prop para definir el estilo degradado
+        buttonStyle={[styles.buttonStyle]}
+        titleStyle={{ color: 'white' }} // Agrega esta prop para definir el estilo del texto del botón
       />
 
-      <View style={styles.gridContainer}>
-        <View style={styles.gridRow}>
-          <View style={styles.gridColumn}>
-            <Button
-              title="Mantenimiento"
-              buttonStyle={[styles.buttonStyle, {width: '100%'}]}
-              titleStyle={[styles.buttonTitleStyle, {fontSize: 11}]}
-              onPress={() => navigation.navigate('Consulservicios')}
-            />
-          </View>
-          <View style={styles.gridColumn}>
-            <Button
-              title="Clientes"
-              buttonStyle={styles.buttonStyle}
-              titleStyle={styles.buttonTitleStyle}
-              onPress={() => {
-                // Agrega aquí la lógica para redirigir al usuario a la pantalla de consulta de clientes
-                navigation.navigate('ConsultaScreen');
-              }}
-            />
-          </View>
-        </View>
-        <View style={styles.gridRow}>
-          <View style={[styles.gridColumn, {width: '48%'}]}>
-            <Button
-              title="Vehículos"
-              buttonStyle={styles.buttonStyle}
-              titleStyle={[styles.buttonTitleStyle, {fontSize: 16}]}
-              onPress={() => { navigation.navigate('Consulreparaciones')}}
-            />
-          </View>
-          <View style={[styles.gridColumn, {width: '48%'}]}>
-            <Button
-              title="Empleados"
-              buttonStyle={styles.buttonStyle}
-              titleStyle={[styles.buttonTitleStyle, {fontSize: 15}]}
-              onPress={() => navigation.navigate('Details')}
-            />
-          </View>
-        </View>
-        
+        <Button
+          title={
+            <>
+              <FontAwesome5 name="users" size={24} color="white" />
+              <Text style={[styles.buttonTitleStyle, {fontSize: 18, marginLeft: 10}]}>Clientes</Text>
+            </>
+          }
+          onPress={() => navigation.navigate('ConsultaScreen')}
+          ViewComponent={LinearGradient} // Agrega esta prop para usar LinearGradient en lugar de View
+          linearGradientProps={gradientStyle} // Agrega esta prop para definir el estilo degradado
+          buttonStyle={[styles.buttonStyle]}
+          titleStyle={{ color: 'white' }} // Agrega esta prop para definir el estilo del texto del botón
+        />
 
-        <View style={styles.gridRow}>
-          <View style={[styles.gridColumn, {width: '100%', paddingLeft: 40, paddingRight: 40}]}>
-            <Button
-              title="Reparaciones"
-              buttonStyle={[styles.buttonStyle, {fontSize: 20, alignSelf: 'center'}]}
-              titleStyle={[styles.buttonTitleStyle, {fontSize: 18}]}
-              onPress={() => { navigation.navigate('Consulreparaciones')}}
-            />
-          </View>
-        </View>
+        <Button
+          title={
+            <>
+              <FontAwesome name="car" size={24} color="white" />
+              <Text style={[styles.buttonTitleStyle, {fontSize: 18, marginLeft: 10}]}>Vehículos</Text>
+            </>
+          }
+          onPress={() => { navigation.navigate('ConsulV')}}
+          ViewComponent={LinearGradient} // Agrega esta prop para usar LinearGradient en lugar de View
+          linearGradientProps={gradientStyle} // Agrega esta prop para definir el estilo degradado
+          buttonStyle={[styles.buttonStyle]}
+          titleStyle={{ color: 'white' }} // Agrega esta prop para definir el estilo del texto del botón
+        />
 
+        <Button
+          title={
+            <>
+              <FontAwesome name="id-card" size={24} color="white" />
+              <Text style={[styles.buttonTitleStyle, {fontSize: 18, marginLeft: 10}]}>Empleados</Text>
+            </>
+          }
+          onPress={() => navigation.navigate('Details')}
+          ViewComponent={LinearGradient} // Agrega esta prop para usar LinearGradient en lugar de View
+          linearGradientProps={gradientStyle} // Agrega esta prop para definir el estilo degradado
+          buttonStyle={[styles.buttonStyle]}
+          titleStyle={{ color: 'white' }} // Agrega esta prop para definir el estilo del texto del botón
+        />
+
+        <Button
+          title={
+            <>
+              <FontAwesome name="wrench" size={24} color="white" />
+              <Text style={[styles.buttonTitleStyle, {fontSize: 18, marginLeft: 10}]}>Reparaciones</Text>
+            </>
+          }
+          onPress={() => { navigation.navigate('Consulreparaciones')}}
+          ViewComponent={LinearGradient} // Agrega esta prop para usar LinearGradient en lugar de View
+          linearGradientProps={gradientStyle} // Agrega esta prop para definir el estilo degradado
+          buttonStyle={[styles.buttonStyle]}
+          titleStyle={{ color: 'white' }} // Agrega esta prop para definir el estilo del texto del botón
+        />
+
+        <Button
+          title={
+            <>
+              <FontAwesome name="wrench" size={24} color="white" />
+              <Text style={[styles.buttonTitleStyle, {fontSize: 18, marginLeft: 10}]}>QR</Text>
+            </>
+          }
+          onPress={() => { navigation.navigate('QrScreen')}}
+          ViewComponent={LinearGradient} // Agrega esta prop para usar LinearGradient en lugar de View
+          linearGradientProps={gradientStyle} // Agrega esta prop para definir el estilo degradado
+          buttonStyle={[styles.buttonStyle]}
+          titleStyle={{ color: 'white' }} // Agrega esta prop para definir el estilo del texto del botón
+        />
+
+         
       </View>
       <StatusBar style="auto" />
     </View>
@@ -86,11 +121,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: "#edf2fa",
-    position: 'relative', // Agrega esta propiedad para que el botón de ayuda se posicione correctamente
+    position: 'relative',
   },
-  gridContainer: {
-    width: '80%',
+  buttonContainer: {
     marginTop: 20,
+    alignItems: 'center',
+    //maxWidth: 250, // Establece la anchura máxima del contenedor de botones
+  },
+  button: {
+    flex: 1, // Distribuye el espacio disponible de manera equitativa
+    marginHorizontal: 5,
+    backgroundColor: 'blue',
+    maxWidth: 120, // Establece la anchura máxima del botón
+    flexShrink: 1, // Permite que el botón se reduzca para ajustarse al contenido
+ 
+  },
+  buttonTitleStyle: {
+    color: 'white',
+    textAlign: 'center',
   },
   helpButtonStyle: {
     backgroundColor: '#FFFFFF',
@@ -105,8 +153,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 5,
     elevation: 5,
-    position: 'absolute', // Agrega esta propiedad para posicionar el botón
-    top: 10, // Agrega estas propiedades para posicionar el botón en la esquina superior derecha
+    position: 'absolute',
+    top: 10,
     right: 10,
   },
   helpButtonTitleStyle: {
@@ -115,20 +163,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  gridRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  gridColumn: {
-    width: '48%',
-  },
   buttonStyle: {
     backgroundColor: '#3B81A5',
     borderRadius: 10,
     paddingVertical: 15,
     paddingHorizontal: 30,
-   shadowColor: '#000000',
+    shadowColor: '#000000',
     shadowOffset: {
       width: 0,
       height: 3,
@@ -136,13 +176,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 5,
     elevation: 5,
+    alignSelf: 'stretch',
+    marginBottom: 20,
+    width: 280,
   },
   buttonTitleStyle: {
-   fontSize: 18,
+    fontSize: 18,
     color: '#FFFFFF',
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  helpButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    padding: 10,
+    backgroundColor: '#E5E8E8',
+    color: '#fff',
+    cursor: 'pointer',
+  }
 });
 
 export default HomeScreen;

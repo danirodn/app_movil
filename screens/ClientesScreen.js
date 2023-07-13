@@ -22,7 +22,7 @@ const ClientesScreen = ({ navigation }) => {
         modelo_vehiculo: modeloVehiculo,
       };
       const docRef = await addDoc(collection(database, 'clientes'), cliente);
-      console.log('Cliente registrado con el ID:', docRef.id);
+      console.log('Cliente registrado con el ID:', cedula);
     } catch (error) {
       console.error('Error al registrar el cliente', error);
     }
