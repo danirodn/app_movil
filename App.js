@@ -132,7 +132,7 @@ export default function App() {
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
-                placeholder="Username"
+                placeholder="Correo"
                 value={username}
                 onChangeText={(text) => setUsername(text)}
               />
